@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { MaxWidthWrapper } from "@/components/max-width-wrapper";
 import { NavItems } from "@/components/layout/nav-items";
 import { buttonVariants } from "@/components/ui/button";
@@ -45,7 +46,7 @@ export function Navbar() {
                     ""
                   ) : (
                     <Link
-                      href={"/sign=up"}
+                      href={"/sign-up"}
                       className={buttonVariants({ variant: "ghost" })}
                     >
                       Create account

@@ -8,11 +8,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ShoppingCartIcon } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+
+import { ShoppingCartIcon } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+
 import Link from "next/link";
-import { buttonVariants } from "../ui/button";
 import Image from "next/image";
 
 export function Cart() {

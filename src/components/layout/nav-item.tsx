@@ -1,9 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { ChevronDownIcon } from "lucide-react";
+
 import { PRODUCT_CATEGORIES } from "@/lib/consts";
 import { cn } from "@/lib/utils";
-import { ChevronDownIcon } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
 
