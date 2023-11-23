@@ -1,7 +1,7 @@
 import { MaxWidthWrapper } from "@/components/max-width-wrapper";
 import { Button, buttonVariants } from "@/components/ui/button";
 
-import { perks } from "@/lib/consts";
+import { PERKS } from "@/lib/consts";
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
 
@@ -10,12 +10,12 @@ export default function Home() {
     <>
       <MaxWidthWrapper>
         <section className="mx-auto flex max-w-3xl flex-col items-center py-20 text-center">
-          <Balancer>
-            <h1 className="text-4xl font-bold tracking-tight text-neutral-900 sm:text-6xl">
+          <h1 className="text-4xl font-bold tracking-tight text-neutral-900 sm:text-6xl">
+            <Balancer>
               Marketplace for high quality{" "}
               <span className="text-green-600">digital assets</span>.
-            </h1>
-          </Balancer>
+            </Balancer>
+          </h1>
           <p className="mt-6 max-w-prose text-lg text-muted-foreground">
             Welcome to Crocodile<span className="text-green-600">IT</span>.
             Every asset on this platform is verified and checked to ensure
@@ -35,7 +35,7 @@ export default function Home() {
       <section className="border-t border-neutral-200 bg-neutral-50">
         <MaxWidthWrapper className="py-20">
           <div className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-0">
-            {perks.map((perk) => (
+            {PERKS.map((perk) => (
               <div
                 key={perk.name}
                 className="text-center md:flex md:items-center md:text-left lg:block lg:text-center"
