@@ -12,6 +12,7 @@ import {
   AuthCredentialsValidator,
   TAuthCredentialsValidator,
 } from "@/lib/valiadtors/account-credentials-validator";
+import { trpc } from "@/trcp/client";
 
 export default function Page() {
   const {
@@ -21,6 +22,9 @@ export default function Page() {
   } = useForm<TAuthCredentialsValidator>({
     resolver: zodResolver(AuthCredentialsValidator),
   });
+
+  const { data } = trpc.testApiRoute.useQuery();
+  console.log(data);
 
   function onSubmit({ email, password }: TAuthCredentialsValidator) {
     //send data to the server
@@ -51,6 +55,8 @@ export default function Page() {
                 <div className="grid gap-1 py-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
+                    autoComplete="on"
+                    id="email"
                     {...register("email")}
                     placeholder="email@example.com"
                     className={cn({
@@ -61,6 +67,7 @@ export default function Page() {
                 <div className="grid gap-1 py-2">
                   <Label htmlFor="password">Password</Label>
                   <Input
+                    id="password"
                     {...register("password")}
                     placeholder="Password"
                     className={cn({
