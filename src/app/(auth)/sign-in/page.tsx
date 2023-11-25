@@ -17,9 +17,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ZodError } from "zod";
 import { trpc } from "@/trcp/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Page() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const isSeller = searchParams.get("as") === "seller";
+  const origin = searchParams.get("origin");
+
   const {
     register,
     handleSubmit,
@@ -28,27 +33,41 @@ export default function Page() {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
-  const router = useRouter();
+  const { mutate: signIn, isLoading } = trpc.auth.signIn.useMutation({
+    onSuccess: () => {
+      toast.success("Sign in successfully.");
 
-  const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({
-    onError: (err) => {
-      if (err.data?.code === "CONFLICT") {
-        toast.error("This email is already in use");
-      }
-      if (err instanceof ZodError) {
-        toast.error(err.issues[0].message);
+      router.refresh();
+
+      if (origin) {
+        router.push(`/${origin}`);
+        return;
       }
 
-      toast.error("Something went wrong. Please try again.");
+      if (isSeller) {
+        router.push("/sell");
+        return;
+      }
+
+      router.push("/");
     },
-    onSuccess: ({ sentToEmail }) => {
-      toast.success(`Verification email sent to ${sentToEmail}.`);
-      router.push("/verify-email?to=" + sentToEmail);
+    onError: (err) => {
+      if (err.data?.code === "UNAUTHORIZED") {
+        toast.error("Invalid error or password.");
+      }
     },
   });
 
   function onSubmit({ email, password }: TAuthCredentialsValidator) {
-    mutate({ email, password });
+    signIn({ email, password });
+  }
+
+  function continueAsSeller() {
+    router.push("?as=seller");
+  }
+
+  function continueAsBuyer() {
+    router.push("/sign-in", undefined);
   }
 
   return (
@@ -58,15 +77,17 @@ export default function Page() {
           <div className="flex flex-col items-center space-y-2 text-center">
             {/* TODO: Add logo switch with div */}
             <div className="h-20 w-20 rounded-full bg-green-600"></div>
-            <h1 className="text-2xl font-bold">Create an account</h1>
+            <h1 className="text-2xl font-bold">
+              Sign in to your {isSeller ? "seller" : null} account
+            </h1>
             <Link
-              href={"/sign-in"}
+              href={"/sign-up"}
               className={buttonVariants({
                 variant: "link",
                 className: "gap-1.5",
               })}
             >
-              Already have an account? Sign-in
+              Don&apos;t have account?
               <ArrowRightIcon className="h-4 w-4" />
             </Link>
           </div>
@@ -107,9 +128,43 @@ export default function Page() {
                     </p>
                   )}
                 </div>
-                <Button>Sign up</Button>
+                <Button>Sign in</Button>
               </div>
             </form>
+
+            <div className="relative">
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 flex items-center"
+              >
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  or
+                </span>
+              </div>
+            </div>
+
+            {isSeller ? (
+              <Button
+                onClick={continueAsBuyer}
+                variant="secondary"
+                disabled={isLoading}
+                className="hover:bg-neutral-200"
+              >
+                Continue as customer
+              </Button>
+            ) : (
+              <Button
+                onClick={continueAsSeller}
+                variant="secondary"
+                disabled={isLoading}
+                className="hover:bg-neutral-200"
+              >
+                Continue as seller
+              </Button>
+            )}
           </div>
         </div>
       </div>

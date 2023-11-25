@@ -1,9 +1,8 @@
+import { authRouter } from "./auth-router";
 import { publicProcedure, router } from "./trpc";
 
 export const appRouter = router({
-  testApiRoute: publicProcedure.query(() => {
-    return "hello world from tRPC";
-  }),
+  auth: authRouter,
 });
 
 export type AppRouter = typeof appRouter;

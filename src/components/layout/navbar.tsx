@@ -4,9 +4,12 @@ import { MaxWidthWrapper } from "@/components/max-width-wrapper";
 import { NavItems } from "@/components/layout/nav-items";
 import { buttonVariants } from "@/components/ui/button";
 import { Cart } from "@/components/layout/cart";
+import { getServersideUser } from "@/lib/payload-utlis";
+import { cookies } from "next/headers";
 
-export function Navbar() {
-  const user = null;
+export async function Navbar() {
+  const nextCookies = cookies();
+  const { user } = await getServersideUser(nextCookies);
 
   return (
     <nav className="sticky inset-x-0 top-0 z-50 h-16 bg-white">
