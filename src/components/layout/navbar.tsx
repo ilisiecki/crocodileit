@@ -4,6 +4,8 @@ import { MaxWidthWrapper } from "@/components/max-width-wrapper";
 import { NavItems } from "@/components/layout/nav-items";
 import { buttonVariants } from "@/components/ui/button";
 import { Cart } from "@/components/layout/cart";
+import { UserDetails } from "@/components/layout/user-details";
+
 import { getServersideUser } from "@/lib/payload-utlis";
 import { cookies } from "next/headers";
 
@@ -46,7 +48,7 @@ export async function Navbar() {
                   )}
 
                   {user ? (
-                    ""
+                    <UserDetails user={user} />
                   ) : (
                     <Link
                       href={"/sign-up"}

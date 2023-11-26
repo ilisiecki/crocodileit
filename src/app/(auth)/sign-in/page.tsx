@@ -15,7 +15,6 @@ import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ZodError } from "zod";
 import { trpc } from "@/trcp/client";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -37,8 +36,6 @@ export default function Page() {
     onSuccess: () => {
       toast.success("Sign in successfully.");
 
-      router.refresh();
-
       if (origin) {
         router.push(`/${origin}`);
         return;
@@ -50,6 +47,7 @@ export default function Page() {
       }
 
       router.push("/");
+      router.refresh();
     },
     onError: (err) => {
       if (err.data?.code === "UNAUTHORIZED") {
